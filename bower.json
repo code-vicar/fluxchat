@@ -1,0 +1,15 @@
+{
+    "name": "fluxchat",
+    "version": "1.0.0",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "lodash": "~2.4.1",
+        "fontawesome": "~4.2.0",
+        "bootstrap-sass": "~3.3.3"
+    }
+}

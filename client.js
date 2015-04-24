@@ -1,0 +1,15 @@
+'use strict';
+// configure our app
+var Moonboots = require('moonboots');
+var BBPromise = require('bluebird');
+
+module.exports.configure = function (app, config) {
+    config = config || {};
+    config.timeout = config.timeout || 10000;
+
+    return new BBPromise(function (resolve) {
+        var clientApp = new Moonboots(config).on('ready', function () {
+            resolve(clientApp);
+        });
+    }).timeout(config.timeout, 'Moonboots timed out');
+};
