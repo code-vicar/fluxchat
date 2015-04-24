@@ -9,6 +9,8 @@ module.exports.configure = function (app, config) {
 
     return new BBPromise(function (resolve) {
         var clientApp = new Moonboots(config).on('ready', function () {
+            clientApp.path = config.path;
+            clientApp.indexPath = config.indexPath;
             resolve(clientApp);
         });
     }).timeout(config.timeout, 'Moonboots timed out');
