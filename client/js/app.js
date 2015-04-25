@@ -1,9 +1,11 @@
 'use strict';
 var socket = require('./socket');
+var SocketEvents = require('SocketEvents');
 
-socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', {
-        my: 'data'
-    });
+socket.on(SocketEvents.UserConnect, function (data) {
+    console.log('user connect, ' + data.connectionCount + ' current users');
+});
+
+socket.on(SocketEvents.UserDisconnect, function (data) {
+    console.log('user disconnected, ' + data.connectionCount + ' remaining');
 });
