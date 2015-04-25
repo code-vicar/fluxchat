@@ -1,3 +1,9 @@
-var test = require('./test');
+'use strict';
+var socket = require('./socket');
 
-console.log(test.testing());
+socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', {
+        my: 'data'
+    });
+});

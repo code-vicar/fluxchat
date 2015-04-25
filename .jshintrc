@@ -84,5 +84,6 @@
 
     // Custom Globals
     "globals"       : {
+        "__rootDir": true
     }
 }

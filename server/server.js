@@ -2,16 +2,15 @@
 var express = require('express');
 var BBPromise = require('bluebird');
 var marko = require('marko');
+var http = require('http');
 
 module.exports.configure = function (app, clientApp) {
     return BBPromise.try(function () {
-
         var index = marko.load(clientApp.indexPath);
 
         app.use('/bower', express.static(clientApp.path + '/bower'));
         app.use('/css', express.static(clientApp.path + '/css'));
 
-        console.log('hosting javascript at ' + clientApp.jsFileName());
         app.get('/' + clientApp.jsFileName(),
             function (req, res) {
                 clientApp.jsSource(function (err, js) {
@@ -26,5 +25,7 @@ module.exports.configure = function (app, clientApp) {
                 appJsFilename: clientApp.jsFileName()
             }, res);
         });
+
+        return http.createServer(app);
     });
 };

@@ -3,7 +3,7 @@
 var Moonboots = require('moonboots');
 var BBPromise = require('bluebird');
 
-module.exports.configure = function (app, config) {
+module.exports.configure = function (config) {
     config = config || {};
     config.timeout = config.timeout || 10000;
 
