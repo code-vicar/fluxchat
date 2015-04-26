@@ -4,4 +4,5 @@ node_modules
 *.sublime-*
 client/bower
 client/css
+client/app.concat.js
 *.marko.js

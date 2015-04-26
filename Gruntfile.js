@@ -6,7 +6,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         wiredep: {
             task: {
-                src: ['client/index.mustache']
+                src: ['client/index.marko']
             }
         },
         compass: {

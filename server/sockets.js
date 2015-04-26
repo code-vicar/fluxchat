@@ -24,6 +24,11 @@ module.exports.configure = function (svr) {
                     connectionCount: connectionCount
                 });
             });
+
+            socket.on(SocketEvents.Chat, function (data) {
+                console.log('chat message broadcast');
+                socket.broadcast.emit(SocketEvents.Chat, data.message);
+            });
         });
 
         return io;

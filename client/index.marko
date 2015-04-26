@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>Fluxchat</title>
+    <head>
+        <title>Fluxchat</title>
 
-    <link href="css/main.css" type="text/css" rel="stylesheet">
+        <link href="css/main.css" type="text/css" rel="stylesheet">
 
-    <!-- bower:js -->
-    <script src="bower/jquery/dist/jquery.js"></script>
-    <script src="bower/lodash/dist/lodash.compat.js"></script>
-    <script src="bower/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
-    <!-- endbower -->
+        <!-- bower:js -->
+        <script src="bower/jquery/dist/jquery.js"></script>
+        <script src="bower/lodash/dist/lodash.compat.js"></script>
+        <script src="bower/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
+        <script src="bower/angular/angular.js"></script>
+        <!-- endbower -->
 
-    <script src="/socket.io/socket.io.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+
+    <body ng-app="fluxchat">
+        Hello World
+    </body>
 
     <script src="${ data.appJsFilename }"></script>
-</head>
-
-<body>
-    Hello World
-</body>
-
 </html>

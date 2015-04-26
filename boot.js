@@ -6,6 +6,7 @@ global.__rootDir = __dirname;
 
 // imports
 var express = require('express');
+
 var client = require('./server/client');
 var server = require('./server/server');
 var sockets = require('./server/sockets');
@@ -23,13 +24,7 @@ var _io;
  * @param config Moonboots configuration object
  * @return clientApp promise that resolves to the moonboots client app
  */
-client.configure({
-    path: __dirname + '/client',
-    indexPath: __dirname + '/client/index.marko',
-    main: __dirname + '/client/js/app.js',
-    modulesDir: __dirname + '/shared',
-    developmentMode: true
-}).then(function (clientApp) {
+return client.configure().then(function (clientApp) {
     /**
      * Configure the express app
      * @param app The express app to configure
@@ -53,4 +48,7 @@ client.configure({
     _io = io;
     console.log('listening on port 3000');
     _server.listen(3000);
+}).catch(function (err) {
+    console.log('server crashed :(');
+    console.log(err);
 });

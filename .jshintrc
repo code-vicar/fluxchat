@@ -84,6 +84,7 @@
 
     // Custom Globals
     "globals"       : {
-        "__rootDir": true
+        "__rootDir": true,
+        "angular": true
     }
 }
