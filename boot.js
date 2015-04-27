@@ -6,49 +6,59 @@ global.__rootDir = __dirname;
 
 // imports
 var express = require('express');
+var BBPromise = require('bluebird');
 
 var client = require('./server/client');
 var server = require('./server/server');
 var sockets = require('./server/sockets');
 
-/**
- * Create Express app
- */
-var app = express();
-var _clientApp;
-var _server;
-var _io;
+module.exports = function (staticDist) {
 
-/**
- * Configure the moonboots client
- * @param config Moonboots configuration object
- * @return clientApp promise that resolves to the moonboots client app
- */
-return client.configure().then(function (clientApp) {
     /**
-     * Configure the express app
-     * @param app The express app to configure
-     * @param clientApp The configured moonboots client app
-     * @return svr promise resolves a node http server
+     * Create Express app
      */
-    _clientApp = clientApp;
-    return server.configure(app, clientApp);
-}).then(function (svr) {
+    var app = express();
+    var _clientApp;
+    var _server;
+    var _io;
+
+
     /**
-     * Configure socket.io
-     * @param svr node http server
-     * @return io promise resolves a socketio instance
+     * Configure the moonboots client
+     * @param config Moonboots configuration object
+     * @return clientApp promise that resolves to the moonboots client app
      */
-    _server = svr;
-    return sockets.configure(svr);
-}).then(function (io) {
-    /**
-     * start server
-     */
-    _io = io;
-    console.log('listening on port 3000');
-    _server.listen(3000);
-}).catch(function (err) {
-    console.log('server crashed :(');
-    console.log(err);
-});
+    return client.configure(staticDist).then(function (clientApp) {
+        /**
+         * Configure the express app
+         * @param app The express app to configure
+         * @param clientApp The configured moonboots client app
+         * @return svr promise resolves a node http server
+         */
+        _clientApp = clientApp;
+        return server.configure(app, clientApp);
+    }).then(function (svr) {
+        /**
+         * Configure socket.io
+         * @param svr node http server
+         * @return io promise resolves a socketio instance
+         */
+        _server = svr;
+        return sockets.configure(svr);
+    }).then(function (io) {
+        /**
+         * start server
+         */
+        _io = io;
+        console.log('listening on port 3000');
+        _server.listen(3000);
+    }).catch(BBPromise.CancellationError, function (err) {
+        if (err.message !== 'staticDist') {
+            throw err;
+        }
+    }).catch(function (err) {
+        console.log('server crashed :(');
+        console.log(err);
+    });
+
+};

@@ -6,3 +6,4 @@ client/bower
 client/css
 client/app.concat.js
 *.marko.js
+.app-cache

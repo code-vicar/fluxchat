@@ -1,5 +1,4 @@
 'use strict';
-var express = require('express');
 var BBPromise = require('bluebird');
 var marko = require('marko');
 var http = require('http');
@@ -7,9 +6,6 @@ var http = require('http');
 module.exports.configure = function (app, clientApp) {
     return BBPromise.try(function () {
         var index = marko.load(clientApp.indexPath);
-
-        app.use('/bower', express.static(clientApp.path + '/bower'));
-        app.use('/css', express.static(clientApp.path + '/css'));
 
         app.get('/' + clientApp.jsFileName(),
             function (req, res) {
@@ -20,10 +16,17 @@ module.exports.configure = function (app, clientApp) {
             }
         );
 
-        app.get('/', function (req, res) {
-            index.render({
-                appJsFilename: clientApp.jsFileName()
-            }, res);
+        app.get('/css/' + clientApp.cssFileName(),
+            function (req, res) {
+                clientApp.cssSource(function (err, css) {
+                    res.set('Content-Type', 'text/css');
+                    res.send(css);
+                });
+            }
+        );
+
+        app.get('*', function (req, res) {
+            index.render(clientApp.htmlContext(), res);
         });
 
         return http.createServer(app);

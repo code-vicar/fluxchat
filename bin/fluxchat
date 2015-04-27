@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+
+var pkg = require('../package.json');
+
+var fluxchat = require('../' + pkg.main);
+
+program
+  .version(pkg.version)
+  .option('-s, --static <dir>', 'Build client app for file system hosting')
+  .parse(process.argv);
+
+fluxchat(program.static);
