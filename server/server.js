@@ -16,7 +16,7 @@ module.exports.configure = function (app, clientApp) {
             }
         );
 
-        app.get('/css/' + clientApp.cssFileName(),
+        app.get('/' + clientApp.cssFileName(),
             function (req, res) {
                 clientApp.cssSource(function (err, css) {
                     res.set('Content-Type', 'text/css');

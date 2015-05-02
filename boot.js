@@ -7,6 +7,7 @@ global.__rootDir = __dirname;
 // imports
 var express = require('express');
 var BBPromise = require('bluebird');
+var config = require('config');
 
 var client = require('./server/client');
 var server = require('./server/server');
@@ -50,8 +51,8 @@ module.exports = function (staticDist) {
          * start server
          */
         _io = io;
-        console.log('listening on port 3000');
-        _server.listen(3000);
+        console.log('listening at http://' + config.get('HOSTNAME') + ':' + config.get('PORT'));
+        _server.listen(parseInt(config.get('PORT'), 10));
     }).catch(BBPromise.CancellationError, function (err) {
         if (err.message !== 'staticDist') {
             throw err;

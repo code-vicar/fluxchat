@@ -4,9 +4,16 @@
     <head>
         <title>Fluxchat</title>
 
-        <link href="css/${ data.cssFileName }" type="text/css" rel="stylesheet">
+        <link href="${ data.cssFileName }" type="text/css" rel="stylesheet">
 
-        <script src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript">
+            /* global window */
+            window.fluxchat = {
+                hostPrefix: '${ data.hostPrefix }'
+            };
+        </script>
+
+        <script src="${ data.hostPrefix }socket.io/socket.io.js"></script>
     </head>
 
     <body ng-app="fluxchat">
