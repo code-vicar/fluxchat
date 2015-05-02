@@ -1,0 +1,14 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+
+    dependencies {
+        classpath group: 'com.github.code-vicar', name: 'cab', version: '1.0.5'
+    }
+}
+
+apply plugin:'Cab'
