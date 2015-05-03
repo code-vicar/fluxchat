@@ -76,7 +76,11 @@ module.exports.configure = function (staticDist) {
         }).then(function (clientApp) {
             if (staticDist) {
                 var template = marko.load(clientApp.indexPath).renderSync(_.merge(clientApp.htmlContext(), {
-                    hostPrefix: 'http://' + config.get('HOSTNAME') + ':' + config.get('PORT') + '/'
+                    node_env: config.util.getEnv('NODE_ENV'),
+                    hostname: config.get('HOSTNAME'),
+                    port: config.get('PORT'),
+                    //prefix: 'http://' + config.get('HOSTNAME') + ':' + config.get('PORT') + '/'
+                    prefix: 'http://10.0.2.2:' + config.get('PORT') + '/'
                 }));
                 return writeFile(path.join(buildDir(), 'index.html'), template).then(function () {
                     console.log('created app for distribution at \'' + buildDir() + '\'');

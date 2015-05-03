@@ -13,6 +13,11 @@ var client = require('./server/client');
 var server = require('./server/server');
 var sockets = require('./server/sockets');
 
+// set default NODE_ENV to development
+if (!config.util.getEnv('NODE_ENV')) {
+    process.env.NODE_ENV = 'development';
+}
+
 module.exports = function (staticDist) {
 
     /**

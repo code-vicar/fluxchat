@@ -8,3 +8,4 @@ client/app.concat.js
 *.marko.js
 .app-cache
 .gradle
+build

@@ -9,11 +9,14 @@
         <script type="text/javascript">
             /* global window */
             window.fluxchat = {
-                hostPrefix: '${ data.hostPrefix }'
+                node_env: '${ data.node_env }',
+                hostname: '${ data.hostname }',
+                port: ${ data.port },
+                prefix: '${ data.prefix }'
             };
         </script>
 
-        <script src="${ data.hostPrefix }socket.io/socket.io.js"></script>
+        <script src="${ data.prefix }socket.io/socket.io.js"></script>
     </head>
 
     <body ng-app="fluxchat">

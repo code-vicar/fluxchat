@@ -1,14 +1,37 @@
 buildscript {
     repositories {
         mavenCentral()
+        /*
         maven {
-            url "https://jitpack.io"
+            url "../cab/build/repo"
+        }
+        */
+        maven {
+            url 'https://jitpack.io'
         }
     }
 
     dependencies {
-        classpath group: 'com.github.code-vicar', name: 'cab', version: '1.0.5'
+        //classpath group: 'com.pushmodo.gradle', name: 'cab', version: '1.0.7'
+        classpath group: 'com.github.code-vicar', name: 'cab', version: '1.0.7'
     }
 }
 
 apply plugin:'Cab'
+
+cab {
+    id = 'com.pushmodo.fluxchat'
+    title = 'fluxchat'
+    platforms = ['android']
+    plugins = [
+        'cordova-plugin-device',
+        'cordova-plugin-whitelist'
+    ]
+    configDir = new File('cordova_config')
+    appDir = new File('.app-cache')
+    configBindings = [
+        'id': 'com.pushmodo.fluxchat',
+        'name': 'Fluxchat',
+        'version': '1.0.0'
+    ]
+}
