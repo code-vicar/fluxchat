@@ -4,24 +4,46 @@
     <head>
         <title>Fluxchat</title>
 
+        <!-- Enable all requests, inline styles, and eval() -->
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+
         <link href="${ data.cssFileName }" type="text/css" rel="stylesheet">
 
         <script type="text/javascript">
-            /* global window */
-            window.fluxchat = {
-                node_env: '${ data.node_env }',
-                hostname: '${ data.hostname }',
-                port: ${ data.port },
-                prefix: '${ data.prefix }'
-            };
+            (function() {
+                ${
+                    // inject environment variables into fluxchat global through the marko template
+                }
+                window.fluxchat = {
+                    node_env: '${ data.node_env }',
+                    hostname: '${ data.hostname }',
+                    port: ${ data.port || 'null' },
+                    prefix: '${ data.prefix }'
+                };
+            }());
         </script>
-
-        <script src="${ data.prefix }socket.io/socket.io.js"></script>
     </head>
 
-    <body ng-app="fluxchat">
+    <body>
         Hello World
     </body>
 
+    <script src="cordova.js"></script>
     <script src="${ data.jsFileName }"></script>
+    <script>
+        (function() {
+            var bootPromise;
+            if (window.cordova) {
+                // On a device, wait for deviceReady
+                bootPromise = fluxchat.onDeviceReady().then(fluxchat.injectSocketioScript).then(fluxchat.bootstrap);
+            } else {
+                // In a browser, don't wait for deviceReady
+                bootPromise = fluxchat.injectSocketioScript().then(fluxchat.bootstrap);
+            }
+            bootPromise.catch(function (err) {
+                console.error('Failed to load fluxchat, error occurred while bootstrapping');
+                console.error(err);
+            });
+        }());
+    </script>
 </html>

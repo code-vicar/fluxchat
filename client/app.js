@@ -1,5 +1,6 @@
 (function () {
     'use strict';
+
     var app = angular.module('fluxchat', [
         'fluxchat.constants',
         'fluxchat.services'

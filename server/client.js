@@ -5,11 +5,17 @@ var BBPromise = require('bluebird');
 var glob = BBPromise.promisify(require('glob'));
 var emptyDir = BBPromise.promisify(require('fs-extra').emptyDir);
 var writeFile = BBPromise.promisify(require('fs-extra').writeFile);
+var readFile = BBPromise.promisify(require('fs-extra').readFile);
 var path = require('path');
 var wiredep = require('wiredep')();
 var marko = require('marko');
 var config = require('config');
 var _ = require('lodash');
+
+/* css */
+var stylus = require('stylus'); //css preprocessor
+var jeet = require('jeet'); // stylus grid plugin
+var koutoSwiss = require('kouto-swiss'); // stylus extensions (like compass is for sass)
 
 var concat = require('./concat');
 
@@ -27,7 +33,7 @@ module.exports.configure = function (staticDist) {
         var moonboots_config = {
             path: __rootDir + '/client',
             indexPath: __rootDir + '/client/index.marko',
-            main: __rootDir + '/client/app.concat.js',
+            main: __rootDir + '/client/.built.js',
             stylesheets: [__rootDir + '/client/css/main.css'].concat(wiredep.css),
             libraries: wiredep.js,
             modulesDir: __rootDir + '/shared',
@@ -37,23 +43,40 @@ module.exports.configure = function (staticDist) {
                 /**
                  * Grab all javascript files to include in the client
                  * exclude bower files (wiredep handles these)
-                 * exclude app.concat.js (creating that now), this will be set as moonboots main
+                 * exclude .built.js (creating that now), this will be set as moonboots main
                  * exclude marko compiled templates
                  */
                 glob(__rootDir + '/client/**/*.js', {
                     ignore: [
                         __rootDir + '/client/bower/**',
-                        __rootDir + '/client/app.concat.js',
+                        __rootDir + '/client/.built.js',
                         __rootDir + '/client/**/*.marko.js'
                     ]
                 }).then(function (files) {
-                    return concat(files, __rootDir + '/client/app.concat.js').then(function () {
+                    return concat(files, __rootDir + '/client/.built.js').then(function () {
                         done();
                     });
                 }).catch(function (err) {
-                    console.error('error building app.concat.js');
                     console.error(err);
-                    throw 'error building app.concat.js';
+                    throw 'error compiling \'.built.js\'';
+                });
+            },
+            beforeBuildCSS: function (done) {
+                readFile(__rootDir + '/client/styl/main.styl', 'utf8').then(function (styl) {
+                    stylus(styl)
+                        .use(koutoSwiss())
+                        .use(jeet())
+                        .import('kouto-swiss')
+                        .render(function (err, css) {
+                            if (err) {
+                                throw err;
+                            }
+
+                            return writeFile(__rootDir + '/client/css/main.css', css).then(done);
+                        });
+                }).catch(function (err) {
+                    console.error(err);
+                    throw 'error compiling \'main.styl\'';
                 });
             },
             developmentMode: !staticDist
@@ -79,8 +102,7 @@ module.exports.configure = function (staticDist) {
                     node_env: config.util.getEnv('NODE_ENV'),
                     hostname: config.get('HOSTNAME'),
                     port: config.get('PORT'),
-                    //prefix: 'http://' + config.get('HOSTNAME') + ':' + config.get('PORT') + '/'
-                    prefix: 'http://10.0.2.2:' + config.get('PORT') + '/'
+                    prefix: 'http://' + config.get('HOSTNAME') + ':' + config.get('PORT') + '/'
                 }));
                 return writeFile(path.join(buildDir(), 'index.html'), template).then(function () {
                     console.log('created app for distribution at \'' + buildDir() + '\'');
